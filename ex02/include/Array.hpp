@@ -5,6 +5,7 @@
 template <typename T>
 class Array {
  private:
+  size_t size;
   T *_array;
 
  public:
@@ -16,6 +17,12 @@ class Array {
 
   // constructors
   Array(size_t n);
+
+  // function
+  size_t size();
+
+  // operator
+  Array<T> &operator[]()
 };
 
 #include "../src/Array.tpp"
