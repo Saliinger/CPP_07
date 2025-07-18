@@ -5,7 +5,7 @@
 template <typename T>
 class Array {
  private:
-  size_t size;
+  size_t _size;
   T *_array;
 
  public:
@@ -18,11 +18,17 @@ class Array {
   // constructors
   Array(size_t n);
 
-  // function
-  size_t size();
-
   // operator
-  Array<T> &operator[]()
+  int &operator[](int index);
+
+  // function
+  size_t size() const;
+
+  // exception
+  class OutOfBondException : public std::exception {
+   public:
+    virtual const char *what(void) const throw();
+  }
 };
 
 #include "../src/Array.tpp"
