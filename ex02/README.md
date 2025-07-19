@@ -54,7 +54,29 @@ Array<T>::Array(const Array &src) : _size(src._size) {
 
 **Impact:** Undefined behavior due to accessing uninitialized `_array`.
 
-### 4. **Invalid Comparison in Assignment Operator**
+### 4. **Double Free Error in Assignment Operator**
+
+**Location:** `Array.tpp` - assignment operator (line 18)
+**Issue:** Incorrectly using `new T()` for array elements
+
+```cpp
+// WRONG - CAUSES DOUBLE FREE:
+_array[i] = new T(src._array[i]);  // Assigning pointer to object!
+
+// CORRECT:
+_array[i] = src._array[i];  // Simple value assignment
+```
+
+**Explanation:**
+
+- You allocate an array of `T` objects with `new T[_size]()`
+- Then you try to assign pointers (`new T(...)`) to array elements
+- This creates a type mismatch and memory management confusion
+- The destructor tries to `delete[]` an array containing pointers, causing double free
+
+**Impact:** Runtime crash due to double free error.
+
+### 5. **Invalid Comparison in Assignment Operator**
 
 **Location:** `Array.tpp` - assignment operator
 **Issue:** Using `!=` operator that doesn't exist
@@ -69,7 +91,7 @@ if (this != &src)  // compare addresses
 
 **Impact:** Compilation error.
 
-### 5. **Memory Allocation Issue in Default Constructor**
+### 6. **Memory Allocation Issue in Default Constructor**
 
 **Location:** `Array.tpp` - default constructor
 **Issue:** Allocating 0-sized array
@@ -89,12 +111,12 @@ Array<T>::Array() : _size(0), _array(NULL) {
 
 ## Minor Issues
 
-### 6. **Typo in Exception Name**
+### 7. **Typo in Exception Name**
 
 **Location:** `Array.hpp` - exception class name
 **Issue:** `OutOfBondException` should be `OutOfBoundsException`
 
-### 7. **Missing const operator[]**
+### 8. **Missing const operator[]**
 
 **Location:** `Array.hpp` - operator[] declaration
 **Issue:** No const version of operator[] for const Array objects
@@ -144,13 +166,14 @@ Based on typical C++ Module 07 ex02 requirements, your implementation should hav
 
 ## Recommended Fixes Priority
 
-1. **HIGH PRIORITY:** Fix operator[] return type (`T&` not `int&`)
-2. **HIGH PRIORITY:** Fix bounds checking logic
-3. **HIGH PRIORITY:** Fix copy constructor implementation
-4. **HIGH PRIORITY:** Fix assignment operator comparison
-5. **MEDIUM PRIORITY:** Fix default constructor memory allocation
-6. **LOW PRIORITY:** Fix exception name typo
-7. **LOW PRIORITY:** Add comprehensive tests to main.cpp
+1. **CRITICAL:** Fix double free error in assignment operator (line 18)
+2. **HIGH PRIORITY:** Fix operator[] return type (`T&` not `int&`)
+3. **HIGH PRIORITY:** Fix bounds checking logic
+4. **HIGH PRIORITY:** Fix copy constructor implementation
+5. **HIGH PRIORITY:** Fix assignment operator comparison
+6. **MEDIUM PRIORITY:** Fix default constructor memory allocation
+7. **LOW PRIORITY:** Fix exception name typo
+8. **LOW PRIORITY:** Add comprehensive tests to main.cpp
 
 ## Testing Recommendations
 

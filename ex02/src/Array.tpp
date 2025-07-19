@@ -6,7 +6,9 @@ Array<T>::Array() : _size(0), _array(NULL) {}
 
 template <typename T>
 Array<T>::Array(const Array &src) {
-  *this = src;
+  _size = src._size;
+  _array = new T[_size];
+  for (unsigned int i = 0; i < _size; i++) _array[i] = src._array[i];
 }
 
 template <typename T>
@@ -14,7 +16,7 @@ Array<T> &Array<T>::operator=(const Array<T> &src) {
   if (this != &src) {
     _size = src._size;
     if (_array) delete[] _array;
-    _array = new T[_size]();
+    _array = new T[_size];
     for (unsigned int i = 0; i < _size; i++) _array[i] = src._array[i];
   }
   return *this;
@@ -34,7 +36,7 @@ Array<T>::Array(unsigned int n) : _size(n) {
 // operator
 template <typename T>
 T &Array<T>::operator[](unsigned int index) {
-  if (index >= 0 && index < _size)
+  if (index < _size)
     return _array[index];
   else
     throw Array<T>::OutOfBoundsException();
