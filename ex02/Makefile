@@ -1,6 +1,6 @@
 NAME = whatever
 CXX = c++
-CXXFLAGS = -Wall -Wextra -Werror #-fsanitize=address
+CXXFLAGS = -Wall -Wextra -Werror -fsanitize=address
 
 SRC =		main.cpp
 

@@ -51,5 +51,5 @@ size_t Array<T>::size() const {
 // exception
 template <typename T>
 const char *Array<T>::OutOfBoundsException::what() const throw() {
-  return "Error: the element accessed is out of bound\n";
+  return "Error: the element accessed is out of bounds\n";
 }
