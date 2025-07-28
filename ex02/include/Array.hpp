@@ -12,7 +12,7 @@ class Array {
   // orthodox cannonical form
   Array();
   Array(const Array &src);
-  Array &operator=(const Array &src);
+  Array &operator=(const Array<T> &src);
   ~Array();
 
   // constructors
