@@ -1,17 +1,22 @@
 NAME = whatever
 CXX = c++
-CXXFLAGS = -Wall -Wextra -Werror
+CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 
 SRC =		main.cpp
 
+.phony: $(NAME) all clean fclean re
+
+OBJ = $(SRC:.cpp=.o)
+
 all:		$(NAME)
 
-$(NAME):	$(SRC)
-			$(CXX) $(CXXFLAGS) -o $(NAME) $(SRC)
+$(NAME):	$(OBJ)
+			$(CXX) $(CXXFLAGS) -o $(NAME) $(OBJ)
 
 clean:
-			rm -f $(NAME)
+			rm -f $(OBJ)
 
 fclean:		clean
+			rm -f $(NAME)
 
 re:			fclean all
